@@ -11,6 +11,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 
 @DataJpaTest
 public class CommandeRepositoryTest {
@@ -58,4 +59,40 @@ public class CommandeRepositoryTest {
         assertEquals(commandeAvecProduits, commande);
         assertEquals(2, commande.getLignes().size());
     }
+
+    @Test
+    void testMontantArticles() {
+        // Données de test
+        Integer numeroCommande = 10248; // Remplacez par une commande valide
+        BigDecimal montantAttendu = new BigDecimal("2830.0000"); // Valeur attendue
+
+        // Exécution
+        BigDecimal montantCalcule = commandeDao.montantArticles(numeroCommande);
+
+        // Vérification
+        assertEquals(montantAttendu, montantCalcule);
+    }
+
+    @Test
+    void testFindCommandesByClient() {
+        // Données de test
+        String codeClient = "ALFKI";
+
+        // Exécution
+        List<Object[]> commandes = commandeDao.findCommandesByClient(codeClient);
+
+        // Vérification
+        assertNotNull(commandes);
+        assertFalse(commandes.isEmpty());
+        for (Object[] commande : commandes) {
+            System.out.println("Commande numéro : " + commande[0]);
+            System.out.println("Saisie le : " + commande[1]);
+            System.out.println("Envoyée le : " + commande[2]);
+            System.out.println("Port : " + commande[3]);
+            System.out.println("Destinataire : " + commande[4]);
+            System.out.println("Montant total : " + commande[5]);
+            System.out.println("---");
+        }
+    }
+
 }
